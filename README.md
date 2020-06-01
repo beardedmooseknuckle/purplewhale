@@ -2,7 +2,7 @@
 
 PurpleWhale is a Twitch chat logging Python package. It includes a chatbot, a web API and a sample web frontend.
 
-#### What's with the name?
+### What's with the name?
 
 **Purple** is for Twitch's primary color; and<br>
 **Whale** is for one of the loudest animals in the world, seemed to fit chat's personality! 😂
