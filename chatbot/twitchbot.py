@@ -21,7 +21,7 @@ class TwitchBot(commands.Bot):
     self.setup_logger()
     
     # User-friendly message on how to stop the bot
-    self.logger.info("Chickaloon is running. Press CTRL-C to exit.")
+    self.logger.info("TwitchBot is running. Press CTRL-C to exit.")
   
   def sigint_handler(self, signal_received, frame):
     self.logger.info('SIGINT or CTRL-C detected. Exiting gracefully...')
@@ -33,15 +33,15 @@ class TwitchBot(commands.Bot):
     # Make sure our logs folder exists (exist_ok prevents an exception if folder exists)
     # @todo change the umask to restrict viewership?
     os.makedirs(logs_path, exist_ok=True)
-    # Chickaloon Logging
+    # TwitchBot Logging
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    self.logger = logging.getLogger("Chickaloon")
+    self.logger = logging.getLogger("TwitchBot")
     self.logger.setLevel(logging.INFO)
     ch = logging.StreamHandler()
     ch.setLevel(logging.INFO)
     ch.setFormatter(formatter)
     self.logger.addHandler(ch)
-    fh = logging.FileHandler(f"{logs_path}chickaloon.log", encoding="utf-8")
+    fh = logging.FileHandler(f"{logs_path}twitchbot.log", encoding="utf-8")
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     self.logger.addHandler(fh)
