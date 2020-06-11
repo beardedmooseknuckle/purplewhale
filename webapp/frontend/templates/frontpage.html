@@ -1,0 +1,12 @@
+{# _frontend/templates/frontpage.html_ #}
+
+{% extends "layout.html" %}
+{% block title %}Login using Twitch{% endblock %}
+{% block body %}
+    {{ super() }}
+    <p class="lead">
+    {% if not g.user %}
+        <a href="{{ url_for('login') }}" class="btn btn-lg btn-secondary btn-twitch">Login using Twitch</a>
+    {% endif %}
+    </p>
+{% endblock %}

@@ -1,0 +1,9 @@
+server {
+    listen 80;
+    server_name {{ domains }};
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:{{ purplewhale_path }}/purplewhale-webapp.sock;
+    }
+}

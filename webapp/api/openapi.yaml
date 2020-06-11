@@ -1,0 +1,345 @@
+openapi: 3.0.0
+
+info:
+  title: PurpleWhale API
+  version: 0.1.0
+  description: Provides a way to search chat logs collected by the provided Twitch chatbot
+  contact:
+    name: BeardedMooseKnuckle
+    email: beardedmooseknuckle@gmail.com
+  license:
+    name: GNU General Public License v3.0
+    url: https://choosealicense.com/licenses/gpl-3.0/
+
+servers:
+  - url: /v1
+    description: Path for API v1
+
+security: 
+  - ApiKeyAuth: []
+
+paths:
+  /users:
+    get:
+      summary: Lists all users in internal database with chat logs
+      operationId: webapp.api.endpoints.get_users_list
+      responses:
+        '200':
+          description: Array of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{user_name}:
+    get:
+      summary: Retrieve all users by user name; used to check user name reuse after change expiry period (6 months)
+      operationId: webapp.api.endpoints.get_users
+      parameters:
+        - name: user_name
+          in: path
+          description: User's name as seen in chat
+          required: True
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User(s) found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{user_name}/logs:
+    get:
+      summary: Retrieve chat log messages for user
+      operationId: webapp.api.endpoints.get_user_logs
+      parameters:
+        - name: user_name
+          in: path
+          description: User's name as seen in chat
+          required: True
+          schema:
+            type: string
+        - name: offset
+          $ref: "#/components/parameters/offsetParam"
+        - name: limit
+          $ref: "#/components/parameters/limitParam"
+      responses:
+        '200':
+          description: Message(s) found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /channels:
+    get:
+      summary: Lists all channels in internal database with chat logs
+      operationId: webapp.api.endpoints.get_channels_list
+      responses:
+        '200':
+          description: Array of channels
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Channel"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /channels/{channel_name}:
+    get:
+      summary: Retrieve all channels by channel name; used to check channel name reuse after change expiry period (6 months)
+      operationId: webapp.api.endpoints.get_channels
+      parameters:
+        - name: channel_name
+          in: path
+          description: Channel's name (typically the streamer's name)
+          required: True
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Channel(s) found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Channel"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /channels/{channel_name}/logs:
+    get:
+      summary: Retrieve chat log messages for channel
+      operationId: webapp.api.endpoints.get_channel_logs
+      parameters:
+        - name: channel_name
+          in: path
+          description: Channel's name (typically the streamer's name)
+          required: True
+          schema:
+            type: string
+        - name: offset
+          $ref: "#/components/parameters/offsetParam"
+        - name: limit
+          $ref: "#/components/parameters/limitParam"
+        - name: begin
+          in: query
+          description: Beginning date-time of logs to retrieve (may get removed)
+          required: False
+          schema:
+            type: date-time
+        - name: end
+          in: query
+          description: End date-time of logs to retrieve (may get removed)
+          required: False
+          schema:
+            type: date-time
+      responses:
+        '200':
+          description: Message(s) found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /context/{message_id}:
+    get:
+      summary: Retrieve context around a specific chat message (quality of life endpoint)
+      operationId: webapp.api.endpoints.get_context
+      parameters:
+        - name: message_id
+          in: path
+          description: Internal message id as stored in database (not Twitch's message id)
+          required: True
+          schema:
+            type: integer
+        - name: size
+          in: query
+          description: Amount of lines to fetch before/after specific chat message
+          required: False
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Message found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      x-apikeyInfoFunc: webapp.api.endpoints.apikey_auth
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - user_id
+        - user_name
+      properties:
+        id:
+          description: Internal database id for the user
+          type: integer
+          format: uint32
+        user_id:
+          description: Twitch User ID (if available)
+          type: integer
+          format: uint32
+        user_name:
+          description: Twitch User Display Name
+          type: string
+    Channel:
+      type: object
+      required:
+        - id
+        - channel_id
+        - channel_name
+      properties:
+        id:
+          description: Internal database id for the channel
+          type: integer
+          format: uint32
+        channel_id:
+          description: Twitch Broadcaster ID (if available)
+          type: integer
+          format: uint32
+          default: 0
+        channel_name:
+          description: Twitch Streamer's Display Name
+          type: string
+    Message:
+      type: object
+      required:
+        - id
+        - cid
+        - channel_id
+        - channel_name
+        - uid
+        - user_id
+        - user_name
+        - message_id
+        - timestamp
+        - content
+      properties:
+        id:
+          description: Internal database id for the message (to be used with /context endpoint)
+          type: integer
+          format: uint32
+        cid:
+          description: Internal database id for the channel
+          type: integer
+          format: uint32
+        channel_id:
+          description: Twitch Broadcaster ID (if available)
+          type: integer
+          format: uint32
+        channel_name:
+          type: string
+        uid:
+          description: Internal database id for the user
+          type: integer
+          format: uint32
+        user_id:
+          description: Twitch User ID (if available)
+          type: integer
+          format: uint32
+          default: 0
+        user_name:
+          type: string
+        message_id:
+          description: Twitch Message ID (if available)
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        content:
+          type: string
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  parameters:
+    offsetParam:
+      name: offset
+      in: query
+      description: Number of items to skip before returning the results.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        default: 0
+    limitParam:
+      name: limit
+      in: query
+      description: Maximum number of items to return.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+        maximum: 100
+        default: 50

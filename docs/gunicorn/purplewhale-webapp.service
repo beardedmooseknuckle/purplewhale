@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve PurpleWhale's Flask applications
+After=network.target
+
+[Service]
+User={{ service_user }}
+Group={{ service_group }}
+WorkingDirectory={{ purplewhale_path }}
+Environment="PATH={{ purplewhale_venv_path }}/bin"
+ExecStart={{ purplewhale_venv_path }}/bin/gunicorn --workers 3 --bind unix:{{ purplewhale_path }}/purplewhale-webapp.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

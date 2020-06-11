@@ -1,0 +1,8 @@
+SECRET_KEY = '' # Use the `purplewhale.py utils secret_key` to generate a secret key
+SQLALCHEMY_DATABASE_URI = '' # Leave this blank
+
+# Do not change the binds, in the future you'll be able to though
+SQLALCHEMY_BINDS = {
+    'frontend':   'mysql+pymysql://user:pass@127.0.0.1/pw_frontend?charset=utf8mb4',
+    'chatbot':    'mysql+pymysql://user:pass@127.0.0.1/pw_chatbot?charset=utf8mb4'
+}

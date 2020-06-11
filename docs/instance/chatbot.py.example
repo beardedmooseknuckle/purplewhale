@@ -1,0 +1,16 @@
+TWITCH_OAUTH_TOKEN = 'oauth:' # https://twitchapps.com/tmi/
+TWITCH_CLIENT_ID = '' # https://dev.twitch.tv/
+TWITCH_BOT_NICK = 'PurpleWhaleBot'
+TWITCH_BOT_PREFIX = '!'
+TWITCH_CHANNELS = ['summit1g'] # make sure this is a list (wrapped in square brackets)
+
+# PonyORM supports 'sqlite', 'mysql', 'postgresql', 'cockroach' and 'oracle'
+# Charset should be utf8mb4 to support 4-byte Unicode emojis
+DATABASE_CONFIG = {
+                  'provider' : 'mysql',
+                  'host': '127.0.0.1',
+                  'user': 'user1',
+                  'passwd': 'password123',
+                  'db': 'pw_chatbot',
+                  'charset': 'utf8mb4'
+                  }

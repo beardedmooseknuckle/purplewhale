@@ -1,0 +1,46 @@
+{# _frontend/templates/admin.html_ #}
+
+{% extends "layout.html" %}
+{% block title %}- Admin{% endblock %}
+{% block body %}
+    {{ super() }}
+    <div class="overflow-auto" style="height: 20em">
+        {% if g.users %}
+            <form id="flimflam-admin" method="get">
+            <table class="table table-dark table-bordered table-striped table-hover w-auto">
+            <thead>
+                <tr>
+                <th scope="col">User</th>
+                <th scope="col" class="th-small">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in g.users %}
+                <tr>
+                    <td class="pt-3">{{ user.preferred_name }}</td>
+                    <td>
+                    <button type="submit" class="btn btn-success" name="authorize_access" value="{{ user.id }}"{% if user.is_authorized %} disabled{% endif %}>
+                    Authorize Access
+                    </button>
+                    <button type="submit" class="btn btn-danger" name="revoke_access" value="{{ user.id }}"{% if not user.is_authorized %} disabled{% endif %}>
+                    Revoke Access
+                    </button>
+                    {% if current_user.preferred_name in config.SUPERADMINS %}
+                    <button type="submit" class="btn btn-success" name="add_admin" value="{{ user.id }}"{% if user.is_admin %} disabled{% endif %}>
+                    Add Admin
+                    </button>
+                    <button type="submit" class="btn btn-danger" name="remove_admin" value="{{ user.id }}"{% if not user.is_admin %} disabled{% endif %}>
+                    Remove Admin
+                    </button>
+                    {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            </form>
+        {% else %}
+            Mmmmmmmm, no users? This shouldn't happen!@$
+        {% endif %}
+    </div>
+{% endblock %}

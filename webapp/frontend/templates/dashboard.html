@@ -1,0 +1,28 @@
+{# _frontend/templates/dashboard.html_ #}
+
+{% extends "layout.html" %}
+{% block title %}- Dashboard{% endblock %}
+{% block body %}
+    {{ super() }}
+    <form id="flimflam-search" method="get">
+        <div class="form-group mb-2">
+            <label for="search-username" class="sr-only">User's name:</label>
+            <input type="text" class="form-control" id="u" name="u" placeholder="Type the user's name in here, then press enter!">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2 sr-only">Search</button>
+    </form>
+    {% if g.searched_user %}
+    <div class="overflow-auto" style="height: 20em">
+        <p>* Logs limited to last 50 messages for now *</p>
+        <p class="text-left">
+        {% if g.lines %}
+            {% for message, user in g.lines %}
+            &#91;{{ message.timestamp }}&#93; &lt;{{ user.user_name }}&gt; {{ message.content }}<br>
+            {% endfor %}
+        {% else %}
+            No logs found for `{{ g.searched_user }}`.
+        {% endif %}
+        </p>
+    </div>
+    {% endif %}
+{% endblock %}

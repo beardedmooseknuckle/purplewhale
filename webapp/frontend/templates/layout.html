@@ -1,0 +1,63 @@
+{# _frontend/templates/layout.html_ #}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>flimflam.io {% block title %}{% endblock %}</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
+
+    {% assets "frontend_css" %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+  </head>
+
+  <body class="text-center">
+
+    <div class="container-fluid cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header class="masthead mb-auto">
+        <div class="inner">
+          <h3 class="masthead-brand"><a href="{{ url_for('frontpage') }}">flimflam.io</a></h3>
+          <nav class="nav nav-masthead justify-content-center">
+            {% if g.user %}
+                {% if g.user.is_admin %}
+                <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
+                {% endif %}
+            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a class="nav-link" href="{{ url_for('logout') }}">Log Out <span>({{ g.user.preferred_name }})</span></a>
+            {% else %}
+            <a class="nav-link active" href="{{ url_for('frontpage') }}">Home</a>
+            {% endif %}
+          </nav>
+        </div>
+      </header>
+
+      <main role="main" class="inner cover">
+        {% with flashes = get_flashed_messages() %}
+        {% if flashes %}
+            <div class="overflow-auto" style="height: 5em">
+                    {% for flash in flashes %}
+                    <p>{{ flash }}</p>
+                    {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+        {% block body %}{% endblock %}
+      </main>
+
+      <footer class="mastfoot mt-auto">
+        <div class="inner">
+          <p><em>In Memoriam<br><small>CBenni, OverRustleLogs, Twitch-Tools</small></em></p>
+          <p><small>Cover template for <a href="https://getbootstrap.com/">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</small></p>
+        </div>
+      </footer>
+    </div>
+
+    {% assets "frontend_js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{# _frontend/templates/unauthorized.html_ #}
+
+{% extends "layout.html" %}
+{% block title %}Unauthorized User{% endblock %}
+{% block body %}
+    {{ super() }}
+    <h1 class="cover-heading">Unauthorized User</h1>
+    <p class="lead">
+    Due to Twitch's Terms of Service in relation to chat logs, access to this website is restricted to summit1g moderators.
+    </p>
+    <p class="lead">
+    If you are a moderator, send a message to @BeardedMooseKnuckle to authorize your account.
+    </p>
+{% endblock %}

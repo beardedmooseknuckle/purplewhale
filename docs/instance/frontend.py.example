@@ -1,0 +1,14 @@
+SECRET_KEY = '' # Use the `purplewhale.py utils secret_key` to generate a secret key
+TWITCH_CLIENT_ID = '' # https://dev.twitch.tv/
+TWITCH_CLIENT_SECRET = '' # https://dev.twitch.tv/
+SQLALCHEMY_DATABASE_URI = '' # Leave this blank
+
+# Do not change the binds, in the future you'll be able to though
+# Charset should be utf8mb4 to support 4-byte Unicode emojis
+SQLALCHEMY_BINDS = {
+    'frontend':   'mysql+pymysql://user:pass@127.0.0.1/pw_frontend?charset=utf8mb4',
+    'chatbot':    'mysql+pymysql://user:pass@127.0.0.1/pw_chatbot?charset=utf8mb4'
+}
+
+# Users in this Python tuple can't be disabled, or deauthorized
+SUPER_ADMINS = ('changeme1', 'deleteme2')

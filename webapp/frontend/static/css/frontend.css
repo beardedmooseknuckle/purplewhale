@@ -1,0 +1,28 @@
+/* Override Cover CSS */
+.cover-container {
+    max-width: 60em;
+}
+
+/* Custom Twitch button */
+.btn-twitch,
+.btn-twitch:hover {
+    color: #fff!important;
+    text-shadow: none!important; /* Prevent inheritance from `body` */
+    background-color: #6441a5!important;
+    border: .05rem solid #402a6a!important;
+}
+
+.btn-twitch:focus,
+.btn-twitch:active {
+    background-color: #503484!important;
+}
+
+.btn-twitch:before {
+    content: url(/static/img/libs/feather/twitch.svg);
+    width: 24px;
+    float: left;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: -5px;
+    filter: invert(100%);
+}

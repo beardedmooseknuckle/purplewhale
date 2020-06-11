@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+Flask = "*"
+Flask-SQLAlchemy = "*"
+PyMySQL = "*"
+twitchio = "*"
+pony = "*"
+authlib = "*"
+gunicorn = "*"
+flask-login = "*"
+flask-assets = "*"
+cssmin = "*"
+jsmin = "*"
+click = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
+
+[packages.connexion]
+extras = [ "swagger-ui",]
